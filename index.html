@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#007bff" />
+  <link rel="manifest" href="manifest.json">
+  <title>Money Management Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+    input[type=number], button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      background: #e9ffe9;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Money Management</h2>
+    <label>Capital ($)</label>
+    <input type="number" id="capital" placeholder="Enter capital">
+    <label>Risk % per Trade</label>
+    <input type="number" id="risk" placeholder="Enter risk %">
+    <label>Win Rate %</label>
+    <input type="number" id="winrate" placeholder="Enter win %">
+    <button onclick="calculate()">Calculate</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const capital = parseFloat(document.getElementById('capital').value);
+      const risk = parseFloat(document.getElementById('risk').value);
+      const winrate = parseFloat(document.getElementById('winrate').value);
+
+      if (isNaN(capital) || isNaN(risk) || isNaN(winrate)) {
+        document.getElementById('result').innerText = 'Please fill all fields with valid numbers.';
+        return;
+      }
+
+      const tradeSize = (capital * (risk / 100)) * (winrate / 100);
+      document.getElementById('result').innerHTML = `
+        <strong>Recommended Trade Size:</strong><br>$${tradeSize.toFixed(2)}
+      `;
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registered', reg))
+          .catch(err => console.log('Service Worker registration failed', err));
+      });
+    }
+  </script>
+</body>
+</html>
